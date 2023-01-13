@@ -1,120 +1,99 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import Searchbar from './Searchbar/Searchbar.jsx';
 import ImageGallery from './ImageGallery/ImageGallery.jsx';
 import Button from './Button/Button.jsx';
 import Loader from './Loader/Loader.jsx';
 import Modal from './Modal/Modal.jsx';
 
-export class App extends React.Component {
-  state = {
-    name: '',
-    page: 1,
-    images: [],
-    isLoading: false,
-    isModalOpen: false,
-    currentImage: { src: '', alt: '' },
-    endSearch: false,
-    error: false,
-  };
+export const App = () => {
+  const [name, setName] = useState('');
+  const [page, setPage] = useState('');
+  const [images, setImages] = useState([]);
+  const [isLoading, setIsLoading] = useState(false);
+  const [isModalOpen, setIsModalOpen] = useState(false);
+  const [currentImage, setCurrentImage] = useState({ src: '', alt: '' });
+  const [endSearch, setEndSearch] = useState(false);
+  const [error, setError] = useState(false);
 
-  componentDidUpdate(_, prevState) {
-    if (
-      prevState.name !== this.state.name ||
-      prevState.page !== this.state.page
-    ) {
-      this.setState({ isLoading: true });
-      this.query();
+  useEffect(() => {
+    if (page) {
+      query(name, page);
     }
-  }
+  }, [name, page]);
 
-  query = () => {
+  function query(name, page) {
     try {
       fetch(
-        `https://pixabay.com/api/?q=${this.state.name}&page=${this.state.page}&key=31147704-3d6790a6d451c63a87a2b7851&image_type=photo&orientation=horizontal&per_page=12`
+        `https://pixabay.com/api/?q=${name}&page=${page}&key=31147704-3d6790a6d451c63a87a2b7851&image_type=photo&orientation=horizontal&per_page=200`
       )
         .then(resp => resp.json())
         .then(resp => {
           if (resp.hits.length === 0) {
-            this.setState({ error: true });
+            setError(true);
             return;
           }
+          setImages(prevState => [...prevState, ...resp.hits]);
 
-          this.setState(prevState => {
-            return { images: [...prevState.images, ...resp.hits] };
-          });
-
-          if (resp.totalHits <= this.state.images.length + resp.hits.length) {
-            this.setState({ endSearch: true });
+          if (resp.totalHits <= images.length + resp.hits.length) {
+            setEndSearch(true);
           }
         });
     } finally {
-      this.setState({ isLoading: false });
+      setIsLoading(false);
     }
-  };
-
-  onSubmit = name => {
-    this.setState({
-      name,
-      page: 1,
-      images: [],
-      endSearch: false,
-      error: false,
-    });
-  };
-
-  onLoadMore = () => {
-    this.setState(prevState => {
-      return {
-        page: prevState.page + 1,
-      };
-    });
-  };
-
-  closeModal = event => {
-    if (event.code === 'Escape') {
-      this.setState({ isModalOpen: false });
-    }
-    window.removeEventListener('keydown', this.closeModal);
-  };
-
-  onModal = currentImage => {
-    this.setState({ isModalOpen: true, currentImage });
-    window.addEventListener('keydown', this.closeModal);
-  };
-
-  offModal = event => {
-    if (event.target === event.currentTarget) {
-      this.setState({ isModalOpen: false });
-    }
-  };
-
-  render() {
-    const { error, images, isLoading, endSearch, currentImage } = this.state;
-    return (
-      <div
-        style={{
-          height: '100vh',
-          display: 'block',
-          justifyContent: 'center',
-          alignItems: 'center',
-          fontSize: 40,
-          color: '#010101',
-          textAlign: 'center',
-        }}
-      >
-        <Searchbar onSubmit={this.onSubmit} />
-        {error && <p>There aren't any results</p>}
-        {images.length > 0 && (
-          <ImageGallery images={images} onModal={this.onModal} />
-        )}
-        {isLoading && <Loader />}
-        {images.length > 0 && !endSearch && (
-          <Button onLoadMore={this.onLoadMore} />
-        )}
-        {this.state.isModalOpen && (
-          <Modal currentImage={currentImage} offModal={this.offModal} />
-        )}
-      </div>
-    );
   }
-}
+
+  const onSubmit = name => {
+    setName(name);
+    setPage(1);
+    setImages([]);
+    setEndSearch(false);
+    setError(false);
+    setIsLoading(true);
+  };
+
+  const onLoadMore = () => {
+    setPage(prevState => prevState + 1);
+    setIsLoading(true);
+  };
+
+  const closeModal = event => {
+    if (event.code === 'Escape') {
+      setIsModalOpen(false);
+    }
+    window.removeEventListener('keydown', closeModal);
+  };
+
+  const onModal = currentImage => {
+    setIsModalOpen(isModalOpen);
+    setCurrentImage(currentImage);
+    window.addEventListener('keydown', closeModal);
+  };
+
+  const offModal = event => {
+    if (event.target === event.currentTarget) {
+      setIsModalOpen(false);
+    }
+  };
+
+  return (
+    <div
+      style={{
+        height: '100vh',
+        display: 'block',
+        justifyContent: 'center',
+        alignItems: 'center',
+        fontSize: 40,
+        color: '#010101',
+        textAlign: 'center',
+      }}
+    >
+      <Searchbar onSubmit={onSubmit} />
+      {error && <p>There aren't any results</p>}
+      {images.length > 0 && <ImageGallery images={images} onModal={onModal} />}
+      {isLoading && <Loader />}
+      {images.length > 0 && !endSearch && <Button onLoadMore={onLoadMore} />}
+      {isModalOpen && <Modal currentImage={currentImage} offModal={offModal} />}
+    </div>
+  );
+};
