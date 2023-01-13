@@ -1,0 +1,12 @@
+.button {
+  background-color: aqua;
+  border-radius: 10px;
+  border: 2px solid green;
+  cursor: pointer;
+  transition-property: background-color;
+  transition: 250ms;
+}
+
+.button:hover {
+  background-color: yellow;
+}
