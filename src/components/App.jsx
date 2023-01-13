@@ -21,10 +21,14 @@ export const App = () => {
     }
   }, [name, page]);
 
+  //что делать с этой ошибкой?
+  //WARNING in src\components\App.jsxonfig:load:flatten Completed in 10ms
+  //Line 22:6:  React Hook useEffect has a missing dependency: 'query'. Either include it or remove the dependency array  react-hooks/exhaustive-deps
+
   function query(name, page) {
     try {
       fetch(
-        `https://pixabay.com/api/?q=${name}&page=${page}&key=31147704-3d6790a6d451c63a87a2b7851&image_type=photo&orientation=horizontal&per_page=200`
+        `https://pixabay.com/api/?q=${name}&page=${page}&key=31147704-3d6790a6d451c63a87a2b7851&image_type=photo&orientation=horizontal&per_page=12`
       )
         .then(resp => resp.json())
         .then(resp => {
