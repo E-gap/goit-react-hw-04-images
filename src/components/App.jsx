@@ -16,9 +16,10 @@ export const App = () => {
   const [error, setError] = useState(false);
 
   useEffect(() => {
-    if (page) {
-      query(name, page);
-    }
+    if (name === '' || page === '') return;
+
+    query(name, page);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [name, page]);
 
   //что делать с этой ошибкой?
@@ -47,14 +48,14 @@ export const App = () => {
     }
   }
 
-  const onSubmit = name => {
+  function onSubmit(name) {
     setName(name);
     setPage(1);
     setImages([]);
     setEndSearch(false);
     setError(false);
     setIsLoading(true);
-  };
+  }
 
   const onLoadMore = () => {
     setPage(prevState => prevState + 1);
