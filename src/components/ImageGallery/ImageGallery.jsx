@@ -3,7 +3,6 @@ import ImageGalleryItem from '../ImageGalleryItem/ImageGalleryItem.jsx';
 import css from './ImageGallery.module.css';
 
 const ImageGallery = ({ images, onModal }) => {
-  console.log(images);
   return (
     <div className={css.container}>
       <ul
