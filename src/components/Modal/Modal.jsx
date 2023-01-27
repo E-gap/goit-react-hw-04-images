@@ -5,18 +5,6 @@ import css from './Modal.module.css';
 const Modal = ({ currentImage, resetCurrentImage }) => {
   const [isModalOpen, setIsModalOpen] = useState(false);
 
-  useEffect(() => {
-    setIsModalOpen(true);
-    window.addEventListener('keydown', closeModalWindow);
-  }, []);
-
-  useEffect(() => {
-    return () => {
-      setIsModalOpen(false);
-      window.removeEventListener('keydown', closeModalWindow);
-    };
-  }, []);
-
   const closeModalWindow = event => {
     if (event.code === 'Escape') {
       resetCurrentImage();
@@ -26,6 +14,16 @@ const Modal = ({ currentImage, resetCurrentImage }) => {
       resetCurrentImage();
     }
   };
+
+  useEffect(() => {
+    setIsModalOpen(true);
+    window.addEventListener('keydown', closeModalWindow);
+
+    return () => {
+      setIsModalOpen(false);
+      window.removeEventListener('keydown', closeModalWindow);
+    };
+  }, [closeModalWindow]);
 
   return (
     isModalOpen && (
