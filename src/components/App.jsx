@@ -18,7 +18,7 @@ export const App = () => {
     if (name === '' || page === '') return;
     setIsLoading(true);
     query();
-  }, [name, page]);
+  }, [name, page, query]);
 
   const query = () => {
     try {
