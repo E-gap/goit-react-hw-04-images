@@ -1,5 +1,5 @@
-import css from './ImageGalleryItem.module.css';
 import PropTypes from 'prop-types';
+import css from './ImageGalleryItem.module.css';
 
 const ImageGalleryItem = ({ image: { webformatURL, largeImageURL, tags } }) => {
   return (

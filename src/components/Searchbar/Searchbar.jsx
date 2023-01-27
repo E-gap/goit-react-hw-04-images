@@ -1,7 +1,7 @@
 import { useState } from 'react';
-import css from './Searchbar.module.css';
 import PropTypes from 'prop-types';
 import { FcSearch } from 'react-icons/fc';
+import css from './Searchbar.module.css';
 
 const Searchbar = ({ onSubmit }) => {
   const [name, setName] = useState('');
@@ -23,10 +23,13 @@ const Searchbar = ({ onSubmit }) => {
   return (
     <header className={css.searchbar}>
       <form className={css.form} onSubmit={handlerSubmit}>
-        <button type="submit" className={css.button}>
+        <button
+          type="submit"
+          className={css.button}
+          disabled={!name ? true : false}
+        >
           <FcSearch className={css.icon} />
         </button>
-
         <input
           className={css.input}
           type="text"

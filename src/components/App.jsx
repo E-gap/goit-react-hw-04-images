@@ -10,23 +10,17 @@ export const App = () => {
   const [page, setPage] = useState('');
   const [images, setImages] = useState([]);
   const [isLoading, setIsLoading] = useState(false);
-  const [isModalOpen, setIsModalOpen] = useState(false);
   const [currentImage, setCurrentImage] = useState({ src: '', alt: '' });
   const [endSearch, setEndSearch] = useState(false);
   const [error, setError] = useState(false);
 
   useEffect(() => {
     if (name === '' || page === '') return;
-
-    query(name, page);
-    // eslint-disable-next-line react-hooks/exhaustive-deps
+    setIsLoading(true);
+    query();
   }, [name, page]);
 
-  //что делать с этой ошибкой?
-  //WARNING in src\components\App.jsxonfig:load:flatten Completed in 10ms
-  //Line 22:6:  React Hook useEffect has a missing dependency: 'query'. Either include it or remove the dependency array  react-hooks/exhaustive-deps
-
-  const query = (name, page) => {
+  const query = () => {
     try {
       fetch(
         `https://pixabay.com/api/?q=${name}&page=${page}&key=31147704-3d6790a6d451c63a87a2b7851&image_type=photo&orientation=horizontal&per_page=12`
@@ -62,23 +56,12 @@ export const App = () => {
     setIsLoading(true);
   };
 
-  const closeModal = event => {
-    if (event.code === 'Escape') {
-      setIsModalOpen(false);
-    }
-    window.removeEventListener('keydown', closeModal);
+  const resetCurrentImage = () => {
+    setCurrentImage({ src: '', alt: '' });
   };
 
   const onModal = currentImage => {
-    setIsModalOpen(isModalOpen);
     setCurrentImage(currentImage);
-    window.addEventListener('keydown', closeModal);
-  };
-
-  const offModal = event => {
-    if (event.target === event.currentTarget) {
-      setIsModalOpen(false);
-    }
   };
 
   return (
@@ -98,7 +81,12 @@ export const App = () => {
       {images.length > 0 && <ImageGallery images={images} onModal={onModal} />}
       {isLoading && <Loader />}
       {images.length > 0 && !endSearch && <Button onLoadMore={onLoadMore} />}
-      {isModalOpen && <Modal currentImage={currentImage} offModal={offModal} />}
+      {currentImage.src && (
+        <Modal
+          currentImage={currentImage}
+          resetCurrentImage={resetCurrentImage}
+        />
+      )}
     </div>
   );
 };

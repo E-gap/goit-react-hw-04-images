@@ -1,10 +1,25 @@
-.button {
+.loadmore {
   background-color: aqua;
-  border-radius: 10px;
-  border: 2px solid green;
+  padding-top: 10px;
+  padding-bottom: 10px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 48px;
+}
+
+.button {
+  width: 600px;
+  height: 48px;
+  border: 2px solid blueviolet;
   cursor: pointer;
+  font-size: 15px;
+  padding: 5px;
+  border-radius: 5px;
   transition-property: background-color;
   transition: 250ms;
+  font-size: 20px;
+  font-weight: 500;
 }
 
 .button:hover {
