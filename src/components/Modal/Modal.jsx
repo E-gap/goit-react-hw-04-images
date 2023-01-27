@@ -23,7 +23,7 @@ const Modal = ({ currentImage, resetCurrentImage }) => {
       setIsModalOpen(false);
       window.removeEventListener('keydown', closeModalWindow);
     };
-  }, [closeModalWindow]);
+  }, []);
 
   return (
     isModalOpen && (
