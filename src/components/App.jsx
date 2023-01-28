@@ -15,32 +15,32 @@ export const App = () => {
   const [error, setError] = useState(false);
 
   useEffect(() => {
+    const query = () => {
+      try {
+        fetch(
+          `https://pixabay.com/api/?q=${name}&page=${page}&key=31147704-3d6790a6d451c63a87a2b7851&image_type=photo&orientation=horizontal&per_page=12`
+        )
+          .then(resp => resp.json())
+          .then(resp => {
+            if (resp.hits.length === 0) {
+              setError(true);
+              return;
+            }
+            setImages(prevState => [...prevState, ...resp.hits]);
+
+            if (resp.totalHits <= images.length + resp.hits.length) {
+              setEndSearch(true);
+            }
+          });
+      } finally {
+        setIsLoading(false);
+      }
+    };
+
     if (name === '' || page === '') return;
     setIsLoading(true);
     query();
-  }, [name, page, query]);
-
-  const query = () => {
-    try {
-      fetch(
-        `https://pixabay.com/api/?q=${name}&page=${page}&key=31147704-3d6790a6d451c63a87a2b7851&image_type=photo&orientation=horizontal&per_page=12`
-      )
-        .then(resp => resp.json())
-        .then(resp => {
-          if (resp.hits.length === 0) {
-            setError(true);
-            return;
-          }
-          setImages(prevState => [...prevState, ...resp.hits]);
-
-          if (resp.totalHits <= images.length + resp.hits.length) {
-            setEndSearch(true);
-          }
-        });
-    } finally {
-      setIsLoading(false);
-    }
-  };
+  }, [name, page]);
 
   const onSubmit = name => {
     setName(name);
