@@ -23,11 +23,7 @@ const Searchbar = ({ onSubmit }) => {
   return (
     <header className={css.searchbar}>
       <form className={css.form} onSubmit={handlerSubmit}>
-        <button
-          type="submit"
-          className={css.button}
-          disabled={!name ? true : false}
-        >
+        <button type="submit" className={css.button}>
           <FcSearch className={css.icon} />
         </button>
         <input
@@ -38,6 +34,7 @@ const Searchbar = ({ onSubmit }) => {
           placeholder="Search images and photos"
           value={name}
           onChange={handlerChangeName}
+          required
         />
       </form>
     </header>
