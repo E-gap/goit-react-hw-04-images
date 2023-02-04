@@ -1,8 +1,10 @@
+import { memo } from 'react';
 import PropTypes from 'prop-types';
 import ImageGalleryItem from '../ImageGalleryItem/ImageGalleryItem.jsx';
 import css from './ImageGallery.module.css';
 
 const ImageGallery = ({ images, onModal }) => {
+  console.log('лишний перерендер');
   return (
     <div className={css.container}>
       <ul
@@ -27,4 +29,4 @@ ImageGallery.propTypes = {
   onModal: PropTypes.func.isRequired,
 };
 
-export default ImageGallery;
+export default memo(ImageGallery);
