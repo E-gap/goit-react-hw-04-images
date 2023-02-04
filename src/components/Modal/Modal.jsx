@@ -1,19 +1,22 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useCallback } from 'react';
 import PropTypes from 'prop-types';
 import css from './Modal.module.css';
 
 const Modal = ({ currentImage, resetCurrentImage }) => {
   const [isModalOpen, setIsModalOpen] = useState(false);
 
-  const closeModalWindow = event => {
-    if (event.code === 'Escape') {
-      resetCurrentImage();
-    }
-    if (event.target === event.currentTarget) {
-      setIsModalOpen(false);
-      resetCurrentImage();
-    }
-  };
+  const closeModalWindow = useCallback(
+    event => {
+      if (event.code === 'Escape') {
+        resetCurrentImage();
+      }
+      if (event.target === event.currentTarget) {
+        setIsModalOpen(false);
+        resetCurrentImage();
+      }
+    },
+    [resetCurrentImage]
+  );
 
   useEffect(() => {
     setIsModalOpen(true);
@@ -23,7 +26,7 @@ const Modal = ({ currentImage, resetCurrentImage }) => {
       setIsModalOpen(false);
       window.removeEventListener('keydown', closeModalWindow);
     };
-  }, []);
+  }, [closeModalWindow]);
 
   return (
     isModalOpen && (
