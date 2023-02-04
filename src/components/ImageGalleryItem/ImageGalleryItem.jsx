@@ -1,3 +1,4 @@
+import { memo } from 'react';
 import PropTypes from 'prop-types';
 import css from './ImageGalleryItem.module.css';
 
@@ -22,4 +23,4 @@ ImageGalleryItem.propTypes = {
   }),
 };
 
-export default ImageGalleryItem;
+export default memo(ImageGalleryItem);

@@ -44,23 +44,23 @@ export const App = () => {
     query();
   }, [name, page]);
 
-  const onSubmit = name => {
+  const onSubmit = useCallback(name => {
     setName(name);
     setPage(1);
     setImages([]);
     setEndSearch(false);
     setError(false);
     setIsLoading(true);
-  };
+  }, []);
 
-  const onLoadMore = () => {
+  const onLoadMore = useCallback(() => {
     setPage(prevState => prevState + 1);
     setIsLoading(true);
-  };
+  }, []);
 
-  const resetCurrentImage = () => {
+  const resetCurrentImage = useCallback(() => {
     setCurrentImage({ src: '', alt: '' });
-  };
+  }, []);
 
   const onModal = useCallback(currentImage => {
     setCurrentImage(currentImage);
