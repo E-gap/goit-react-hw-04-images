@@ -32,6 +32,8 @@ export const App = () => {
               setEndSearch(true);
             }
           });
+      } catch (error) {
+        setError(true);
       } finally {
         setIsLoading(false);
       }
