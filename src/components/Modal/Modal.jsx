@@ -1,6 +1,9 @@
 import { useState, useEffect, useCallback } from 'react';
+import { createPortal } from 'react-dom';
 import PropTypes from 'prop-types';
 import css from './Modal.module.css';
+
+const modalRoot = document.querySelector('#modal-root');
 
 const Modal = ({ currentImage, resetCurrentImage }) => {
   const [isModalOpen, setIsModalOpen] = useState(false);
@@ -29,12 +32,14 @@ const Modal = ({ currentImage, resetCurrentImage }) => {
   }, [closeModalWindow]);
 
   return (
-    isModalOpen && (
+    isModalOpen &&
+    createPortal(
       <div className={css.overlay} onClick={closeModalWindow}>
         <div className={css.modal}>
           <img src={currentImage.src} alt={currentImage.alt} />
         </div>
-      </div>
+      </div>,
+      modalRoot
     )
   );
 };
