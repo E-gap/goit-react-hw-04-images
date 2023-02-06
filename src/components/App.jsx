@@ -11,8 +11,8 @@ export const App = () => {
   const [images, setImages] = useState([]);
   const [isLoading, setIsLoading] = useState(false);
   const [currentImage, setCurrentImage] = useState({ src: '', alt: '' });
-  const [endSearch, setEndSearch] = useState(false);
   const [error, setError] = useState(false);
+  const [totalHits, setTotalHits] = useState(0);
 
   useEffect(() => {
     const query = () => {
@@ -27,10 +27,7 @@ export const App = () => {
               return;
             }
             setImages(prevState => [...prevState, ...resp.hits]);
-
-            if (resp.totalHits <= images.length + resp.hits.length) {
-              setEndSearch(true);
-            }
+            setTotalHits(resp.totalHits);
           });
       } catch (error) {
         setError(true);
@@ -48,7 +45,7 @@ export const App = () => {
     setName(name);
     setPage(1);
     setImages([]);
-    setEndSearch(false);
+    setTotalHits(0);
     setError(false);
     setIsLoading(true);
   }, []);
@@ -82,7 +79,9 @@ export const App = () => {
       {error && <p>There aren't any results</p>}
       {images.length > 0 && <ImageGallery images={images} onModal={onModal} />}
       {isLoading && <Loader />}
-      {images.length > 0 && !endSearch && <Button onLoadMore={onLoadMore} />}
+      {images.length > 0 && images.length <= totalHits && (
+        <Button onLoadMore={onLoadMore} />
+      )}
       {currentImage.src && (
         <Modal
           currentImage={currentImage}
