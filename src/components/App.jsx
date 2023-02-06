@@ -79,9 +79,10 @@ export const App = () => {
       {error && <p>There aren't any results</p>}
       {images.length > 0 && <ImageGallery images={images} onModal={onModal} />}
       {isLoading && <Loader />}
-      {images.length > 0 && images.length <= totalHits && (
+      {images.length > 0 && images.length < totalHits && (
         <Button onLoadMore={onLoadMore} />
       )}
+
       {currentImage.src && (
         <Modal
           currentImage={currentImage}
